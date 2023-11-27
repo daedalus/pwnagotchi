@@ -18,10 +18,14 @@ class Peer(object):
 
     def update(self, sid, channel, rssi, adv):
         if self.name() != adv['name']:
-            core.log("peer %s changed name: %s -> %s" % (self.full_name(), self.name(), adv['name']))
+            core.log(
+                f"peer {self.full_name()} changed name: {self.name()} -> {adv['name']}"
+            )
 
         if self.session_id != sid:
-            core.log("peer %s changed session id: %s -> %s" % (self.full_name(), self.session_id, sid))
+            core.log(
+                f"peer {self.full_name()} changed session id: {self.session_id} -> {sid}"
+            )
 
         self.presence[channel - 1] += 1
         self.adv = adv
@@ -60,7 +64,7 @@ class Peer(object):
         return self._adv_field('epoch', default=0)
 
     def full_name(self):
-        return '%s@%s' % (self.name(), self.identity())
+        return f'{self.name()}@{self.identity()}'
 
     def is_closer(self, other):
         return self.rssi > other.rssi

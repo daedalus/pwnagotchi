@@ -86,12 +86,14 @@ class Advertiser(object):
         self._stopped.set()
 
     def _sender(self):
-        core.log("started advertiser thread (period:%s sid:%s) ..." % (str(self._period), self._me.session_id))
+        core.log(
+            f"started advertiser thread (period:{str(self._period)} sid:{self._me.session_id}) ..."
+        )
         while self._running:
             try:
                 sendp(self._frame, iface=self._iface, verbose=False, count=5, inter=self._period)
             except Exception as e:
-                core.log("error: %s" % e)
+                core.log(f"error: {e}")
             time.sleep(self._period)
 
     def _on_advertisement(self, src_session_id, channel, rssi, adv):
@@ -160,11 +162,11 @@ class Advertiser(object):
                     raise Exception("unknown frame id %d" % dot11elt.ID)
 
             except Exception as e:
-                core.log("error decoding packet from %s: %s" % (dot11.addr3, e))
+                core.log(f"error decoding packet from {dot11.addr3}: {e}")
 
     def _listener(self):
         # core.log("started advertisements listener ...")
-        expr = "type mgt subtype beacon and ether src %s" % wifi.SignatureAddress
+        expr = f"type mgt subtype beacon and ether src {wifi.SignatureAddress}"
         sniff(iface=self._iface, filter=expr, prn=self._on_packet, store=0, stop_filter=lambda x: self._stopped.isSet())
 
     def _pruner(self):

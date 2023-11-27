@@ -56,7 +56,7 @@ class Environment(gym.Env):
 
     @staticmethod
     def policy_size():
-        return len(list(p for p in Environment.params if p.trainable))
+        return len([p for p in Environment.params if p.trainable])
 
     @staticmethod
     def policy_to_params(policy):
@@ -74,9 +74,9 @@ class Environment(gym.Env):
                 params[param.name] = param.to_param_value(policy[i])
             else:
                 has_chan = param.to_param_value(policy[i])
-                # print("%s policy:%s bool:%s" % (param.name, policy[i], has_chan))
-                chan = param.meta
                 if has_chan:
+                    # print("%s policy:%s bool:%s" % (param.name, policy[i], has_chan))
+                    chan = param.meta
                     channels.append(chan)
 
         params['channels'] = channels
@@ -142,7 +142,7 @@ class Environment(gym.Env):
         core.log("[ai] observation:")
         for name, value in self.last['state'].items():
             if 'histogram' in name:
-                core.log("    %s" % name.replace('_histogram', ''))
+                core.log(f"    {name.replace('_histogram', '')}")
                 self._render_histogram(value)
 
         # core.log("[ai] outcome:")

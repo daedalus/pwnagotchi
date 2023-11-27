@@ -19,7 +19,7 @@ class Client(object):
             return r.json()
         except Exception as e:
             if r.status_code == 200:
-                core.log("error while decoding json: error='%s' resp='%s'" % (e, r.text))
+                core.log(f"error while decoding json: error='{e}' resp='{r.text}'")
             else:
                 err = "error %d: %s" % (r.status_code, r.text.strip())
                 if verbose_errors:
@@ -28,13 +28,13 @@ class Client(object):
             return r.text
 
     def session(self):
-        r = requests.get("%s/session" % self.url, auth=self.auth)
+        r = requests.get(f"{self.url}/session", auth=self.auth)
         return self._decode(r)
 
     def events(self):
-        r = requests.get("%s/events" % self.url, auth=self.auth)
+        r = requests.get(f"{self.url}/events", auth=self.auth)
         return self._decode(r)
 
     def run(self, command, verbose_errors=True):
-        r = requests.post("%s/session" % self.url, auth=self.auth, json={'cmd': command})
+        r = requests.post(f"{self.url}/session", auth=self.auth, json={'cmd': command})
         return self._decode(r, verbose_errors=verbose_errors)

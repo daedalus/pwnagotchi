@@ -257,11 +257,7 @@ class EPD:
         return 0
 
     def getbuffer(self, image):
-        if self.width % 8 == 0:
-            linewidth = self.width // 8
-        else:
-            linewidth = self.width // 8 + 1
-
+        linewidth = self.width // 8 if self.width % 8 == 0 else self.width // 8 + 1
         buf = [0xFF] * (linewidth * self.height)
         image_monocolor = image.convert('1')
         imwidth, imheight = image_monocolor.size
@@ -286,11 +282,7 @@ class EPD:
         return buf
 
     def display(self, image):
-        if self.width % 8 == 0:
-            linewidth = self.width // 8
-        else:
-            linewidth = self.width // 8 + 1
-
+        linewidth = self.width // 8 if self.width % 8 == 0 else self.width // 8 + 1
         self.send_command(0x24)
         for j in range(0, self.height):
             for i in range(0, linewidth):
@@ -298,11 +290,7 @@ class EPD:
         self.TurnOnDisplay()
 
     def displayPartial(self, image):
-        if self.width % 8 == 0:
-            linewidth = self.width // 8
-        else:
-            linewidth = self.width // 8 + 1
-
+        linewidth = self.width // 8 if self.width % 8 == 0 else self.width // 8 + 1
         self.send_command(0x24)
         for j in range(0, self.height):
             for i in range(0, linewidth):
@@ -314,15 +302,12 @@ class EPD:
         self.TurnOnDisplay()
 
     def Clear(self, color):
-        if self.width % 8 == 0:
-            linewidth = self.width // 8
-        else:
-            linewidth = self.width // 8 + 1
+        linewidth = self.width // 8 if self.width % 8 == 0 else self.width // 8 + 1
         # print(linewidth)
 
         self.send_command(0x24)
-        for j in range(0, self.height):
-            for i in range(0, linewidth):
+        for _ in range(0, self.height):
+            for _ in range(0, linewidth):
                 self.send_data(color)
         self.TurnOnDisplay()
 

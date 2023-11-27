@@ -24,35 +24,74 @@ class View(object):
         self._config = config
         self._canvas = None
         self._lock = Lock()
-        self._state = State(state={
-            'channel': LabeledValue(color=BLACK, label='CH', value='00', position=(0, 0), label_font=fonts.Bold,
-                                    text_font=fonts.Medium),
-            'aps': LabeledValue(color=BLACK, label='APS', value='0 (00)', position=(30, 0), label_font=fonts.Bold,
-                                text_font=fonts.Medium),
-            #'epoch': LabeledValue(color=BLACK, label='E', value='0000', position=(145, 0), label_font=fonts.Bold,
-            #                      text_font=fonts.Medium),
-            'uptime': LabeledValue(color=BLACK, label='UP', value='00:00:00', position=(185, 0), label_font=fonts.Bold,
-                                   text_font=fonts.Medium),
-
-            # 'square':  Rect([1, 11, 124, 111]),
-            'line1': Line([0, 13, 250, 13], color=BLACK),
-            'line2': Line([0, 109, 250, 109], color=BLACK),
-
-            # 'histogram': Histogram([4, 94], color = BLACK),
-
-            'face': Text(value=faces.SLEEP, position=(0, 40), color=BLACK, font=fonts.Huge),
-
-            'friend_face': Text(value=None, position=(0, 90), font=fonts.Bold, color=BLACK),
-            'friend_name': Text(value=None, position=(40, 93), font=fonts.BoldSmall, color=BLACK),
-
-            'name': Text(value='%s>' % 'pwnagotchi', position=(125, 20), color=BLACK, font=fonts.Bold),
-            # 'face2':   Bitmap( '/root/pwnagotchi/data/images/face_happy.bmp', (0, 20)),
-            'status': Text(value=voice.default(), position=(125, 35), color=BLACK, font=fonts.Medium),
-
-            'shakes': LabeledValue(label='PWND ', value='0 (00)', color=BLACK, position=(0, 110), label_font=fonts.Bold,
-                                   text_font=fonts.Medium),
-            'mode': Text(value='AUTO', position=(225, 110), font=fonts.Bold, color=BLACK),
-        })
+        self._state = State(
+            state={
+                'channel': LabeledValue(
+                    color=BLACK,
+                    label='CH',
+                    value='00',
+                    position=(0, 0),
+                    label_font=fonts.Bold,
+                    text_font=fonts.Medium,
+                ),
+                'aps': LabeledValue(
+                    color=BLACK,
+                    label='APS',
+                    value='0 (00)',
+                    position=(30, 0),
+                    label_font=fonts.Bold,
+                    text_font=fonts.Medium,
+                ),
+                'uptime': LabeledValue(
+                    color=BLACK,
+                    label='UP',
+                    value='00:00:00',
+                    position=(185, 0),
+                    label_font=fonts.Bold,
+                    text_font=fonts.Medium,
+                ),
+                'line1': Line([0, 13, 250, 13], color=BLACK),
+                'line2': Line([0, 109, 250, 109], color=BLACK),
+                'face': Text(
+                    value=faces.SLEEP,
+                    position=(0, 40),
+                    color=BLACK,
+                    font=fonts.Huge,
+                ),
+                'friend_face': Text(
+                    value=None, position=(0, 90), font=fonts.Bold, color=BLACK
+                ),
+                'friend_name': Text(
+                    value=None,
+                    position=(40, 93),
+                    font=fonts.BoldSmall,
+                    color=BLACK,
+                ),
+                'name': Text(
+                    value='pwnagotchi>',
+                    position=(125, 20),
+                    color=BLACK,
+                    font=fonts.Bold,
+                ),
+                'status': Text(
+                    value=voice.default(),
+                    position=(125, 35),
+                    color=BLACK,
+                    font=fonts.Medium,
+                ),
+                'shakes': LabeledValue(
+                    label='PWND ',
+                    value='0 (00)',
+                    color=BLACK,
+                    position=(0, 110),
+                    label_font=fonts.Bold,
+                    text_font=fonts.Medium,
+                ),
+                'mode': Text(
+                    value='AUTO', position=(225, 110), font=fonts.Bold, color=BLACK
+                ),
+            }
+        )
 
         for key, value in state.items():
             self._state.set(key, value)
@@ -72,7 +111,7 @@ class View(object):
 
         while True:
             name = self._state.get('name')
-            self.set('name', name.rstrip('█').strip() if '█' in name else (name + ' █'))
+            self.set('name', name.rstrip('█').strip() if '█' in name else f'{name} █')
             self.update()
             time.sleep(delay)
 

@@ -43,17 +43,18 @@ class EpochMock(object):
         num_inactive = tot_epochs - num_active
 
         tot_interactions = random.randint(0, 100)
-        missed = random.randint(0, int(tot_interactions / 10))
+        missed = random.randint(0, tot_interactions // 10)
         num_deauth = random.randint(0, tot_interactions - missed)
         num_assocs = tot_interactions - num_deauth
 
         # time.sleep(duration)
 
         data = {
-            'aps_histogram': [random.random() for c in range(0, wifi.NumChannels)],
-            'sta_histogram': [random.random() for c in range(0, wifi.NumChannels)],
-            'peers_histogram': [random.random() for c in range(0, wifi.NumChannels)],
-
+            'aps_histogram': [random.random() for _ in range(0, wifi.NumChannels)],
+            'sta_histogram': [random.random() for _ in range(0, wifi.NumChannels)],
+            'peers_histogram': [
+                random.random() for _ in range(0, wifi.NumChannels)
+            ],
             'duration_secs': duration,
             'slept_for_secs': slept,
             'blind_for_epochs': random.randint(0, 5),
@@ -64,9 +65,9 @@ class EpochMock(object):
             'num_deauths': num_deauth,
             'num_associations': num_assocs,
             'num_handshakes': random.randint(0, tot_interactions),
-            'cpu_load': .5 + random.random(),
-            'mem_usage': .5 + random.random(),
-            'temperature': random.randint(40, 60)
+            'cpu_load': 0.5 + random.random(),
+            'mem_usage': 0.5 + random.random(),
+            'temperature': random.randint(40, 60),
         }
 
         self.epoch += 1
@@ -86,7 +87,7 @@ model.save("test.nn")
 
 print("running ...")
 obs = env.reset()
-for i in range(1000):
+for _ in range(1000):
     env.render()
     action, _states = model.predict(obs)
     obs, rewards, dones, info = env.step(action)

@@ -34,10 +34,10 @@ if args.do_clear:
 with open(args.config, 'rt') as fp:
     config = yaml.safe_load(fp)
 
-display = Display(config=config, state={'name': '%s>' % pwnagotchi.name()})
+display = Display(config=config, state={'name': f'{pwnagotchi.name()}>'})
 agent = Agent(view=display, config=config)
 
-core.log("%s@%s (v%s)" % (pwnagotchi.name(), agent._identity, pwnagotchi.version))
+core.log(f"{pwnagotchi.name()}@{agent._identity} (v{pwnagotchi.version})")
 # for key, value in config['personality'].items():
 #    core.log("  %s: %s" % (key, value))
 
@@ -78,9 +78,9 @@ if args.do_manual:
                 api.update_with_media(filename=picture, status=tweet)
                 log.save_session_id()
 
-                core.log("tweeted: %s" % tweet)
+                core.log(f"tweeted: {tweet}")
             except Exception as e:
-                core.log("error: %s" % e)
+                core.log(f"error: {e}")
 
     quit()
 
@@ -127,5 +127,5 @@ while True:
         # affect ours ... neat ^_^
         agent.next_epoch()
     except Exception as e:
-        core.log("main loop exception: %s" % e)
-        core.log("%s" % traceback.format_exc())
+        core.log(f"main loop exception: {e}")
+        core.log(f"{traceback.format_exc()}")

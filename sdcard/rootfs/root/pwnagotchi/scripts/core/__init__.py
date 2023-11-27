@@ -12,7 +12,7 @@ loglock = Lock()
 
 def log(msg):
     tstamp = str(datetime.now())
-    line = "[%s] %s" % (tstamp, msg.rstrip())
+    line = f"[{tstamp}] {msg.rstrip()}"
     print(line)
     sys.stdout.flush()
     if logfile is not None:
@@ -33,7 +33,7 @@ def total_unique_handshakes(path):
 
 
 def iface_address(ifname):
-    output = subprocess.getoutput("/usr/sbin/ifconfig %s" % ifname)
+    output = subprocess.getoutput(f"/usr/sbin/ifconfig {ifname}")
     for line in output.split("\n"):
         line = line.strip()
         if line.startswith("inet "):
@@ -46,7 +46,7 @@ def led(on=True):
 
 
 def blink(times=1, delay=0.3):
-    for t in range(0, times):
+    for _ in range(0, times):
         led(True)
         time.sleep(delay)
         led(False)

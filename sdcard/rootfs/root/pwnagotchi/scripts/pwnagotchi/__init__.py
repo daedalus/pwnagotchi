@@ -44,5 +44,5 @@ def cpu_load():
 def temperature(celsius=True):
     with open('/sys/class/thermal/thermal_zone0/temp', 'rt') as fp:
         temp = int(fp.read().strip())
-    c = int(temp / 1000)
+    c = temp // 1000
     return c if celsius else ((c * (9 / 5)) + 32)

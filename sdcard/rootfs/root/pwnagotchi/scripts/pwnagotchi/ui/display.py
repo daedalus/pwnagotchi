@@ -108,10 +108,14 @@ class Display(View):
         self.on_render(self._on_view_rendered)
 
     def image(self):
-        img = None
         if self.canvas is not None:
-            img = self.canvas if self._rotation == 0 else self.canvas.rotate(-self._rotation)
-        return img
+            return (
+                self.canvas
+                if self._rotation == 0
+                else self.canvas.rotate(-self._rotation)
+            )
+        else:
+            return None
 
     def _on_view_rendered(self, img):
         # core.log("display::_on_view_rendered")

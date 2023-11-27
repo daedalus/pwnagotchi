@@ -32,11 +32,11 @@ def load(config, agent, epoch, from_disk=True):
     a2c = A2C(MlpLstmPolicy, env, **config['params'])
 
     if from_disk and os.path.exists(config['path']):
-        core.log("[ai] loading %s ..." % config['path'])
+        core.log(f"[ai] loading {config['path']} ...")
         a2c.load(config['path'], env)
     else:
         core.log("[ai] model created:")
         for key, value in config['params'].items():
-            core.log("      %s: %s" % (key, value))
+            core.log(f"      {key}: {value}")
 
     return a2c

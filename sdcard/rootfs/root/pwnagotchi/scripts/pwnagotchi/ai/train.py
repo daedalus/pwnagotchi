@@ -55,7 +55,7 @@ class Stats(object):
     def load(self):
         with self._lock:
             if os.path.exists(self.path):
-                core.log("[ai] loading %s" % self.path)
+                core.log(f"[ai] loading {self.path}")
                 with open(self.path, 'rt') as fp:
                     obj = json.load(fp)
 
@@ -65,7 +65,7 @@ class Stats(object):
 
     def save(self):
         with self._lock:
-            core.log("[ai] saving %s" % self.path)
+            core.log(f"[ai] saving {self.path}")
             with open(self.path, 'wt') as fp:
                 json.dump({
                     'born_at': self.born_at,
@@ -86,7 +86,7 @@ class AsyncTrainer(object):
         self._is_training = False
         self._training_epochs = 0
         self._nn_path = self._config['ai']['path']
-        self._stats = Stats("%s.json" % os.path.splitext(self._nn_path)[0], self)
+        self._stats = Stats(f"{os.path.splitext(self._nn_path)[0]}.json", self)
 
     def set_training(self, training, for_epochs=0):
         self._is_training = training
@@ -102,7 +102,7 @@ class AsyncTrainer(object):
         _thread.start_new_thread(self._ai_worker, ())
 
     def _save_ai(self):
-        core.log("[ai] saving model to %s ..." % self._nn_path)
+        core.log(f"[ai] saving model to {self._nn_path} ...")
         self._model.save(self._nn_path)
 
     def on_ai_step(self):
@@ -122,21 +122,21 @@ class AsyncTrainer(object):
             if name in self._config['personality']:
                 curr_value = self._config['personality'][name]
                 if curr_value != value:
-                    core.log("[ai] ! %s: %s -> %s" % (name, curr_value, value))
+                    core.log(f"[ai] ! {name}: {curr_value} -> {value}")
                     self._config['personality'][name] = value
             else:
-                core.log("[ai] param %s not in personality configuration!" % name)
+                core.log(f"[ai] param {name} not in personality configuration!")
 
         self.run('set wifi.ap.ttl %d' % self._config['personality']['ap_ttl'])
         self.run('set wifi.sta.ttl %d' % self._config['personality']['sta_ttl'])
         self.run('set wifi.rssi.min %d' % self._config['personality']['min_rssi'])
 
     def on_ai_best_reward(self, r):
-        core.log("[ai] best reward so far: %s" % r)
+        core.log(f"[ai] best reward so far: {r}")
         self._view.on_motivated(r)
 
     def on_ai_worst_reward(self, r):
-        core.log("[ai] worst reward so far: %s" % r)
+        core.log(f"[ai] worst reward so far: {r}")
         self._view.on_demotivated(r)
 
     def _ai_worker(self):
@@ -156,11 +156,10 @@ class AsyncTrainer(object):
                     self.set_training(True, epochs_per_episode)
                     self._model.learn(total_timesteps=epochs_per_episode, callback=self.on_ai_training_step)
                 except Exception as e:
-                    core.log("[ai] error while training: %s" % e)
+                    core.log(f"[ai] error while training: {e}")
                 finally:
                     self.set_training(False)
                     obs = self._model.env.reset()
-            # init the first time
             elif obs is None:
                 obs = self._model.env.reset()
 

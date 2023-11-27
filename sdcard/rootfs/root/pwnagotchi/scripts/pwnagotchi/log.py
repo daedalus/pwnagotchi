@@ -84,8 +84,7 @@ class SessionParser(object):
 
             elif SessionParser.EPOCH_TOKEN in line:
                 self.epochs += 1
-                m = SessionParser.EPOCH_PARSER.findall(line)
-                if m:
+                if m := SessionParser.EPOCH_PARSER.findall(line):
                     epoch_num, epoch_data = m[0]
                     m = SessionParser.EPOCH_DATA_PARSER.findall(epoch_data)
                     for key, value in m:
@@ -99,8 +98,7 @@ class SessionParser(object):
                                 self.max_reward = reward
 
             elif SessionParser.PEER_TOKEN in line:
-                m = self._peer_parser.findall(line)
-                if m:
+                if m := self._peer_parser.findall(line):
                     name, pubkey, rssi, sid, pwnd_tot, uptime = m[0]
                     if pubkey not in cache:
                         self.last_peer = Peer(sid, 1, int(rssi),

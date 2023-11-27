@@ -105,7 +105,7 @@ def on_waiting(secs):
 
 def on_assoc(ap):
     ssid, bssid = ap['hostname'], ap['mac']
-    what = ssid if ssid != '' and ssid != '<hidden>' else bssid
+    what = ssid if ssid not in ['', '<hidden>'] else bssid
     return random.choice([ \
         'Hey\n%s\nlet\'s be friends!' % what,
         'Associating to\n%s' % what,
